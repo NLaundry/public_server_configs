@@ -21,7 +21,7 @@ services:
       - "traefik.http.routers.traefik.rule=Host(`traefik.$DOMAINNAME`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.middlewares=traefik_dashboard_auth"
-      - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.users=admin:$$2y$$05$$UBSaiZSQySmOPJtsrgt5D.s01OsnyYYbKsGr1fA1.eKFEjy.xGKHu"
+      - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.users=${USER}:${PASS}"
       - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.headerField=X-WebAuth-User"
 
 networks:

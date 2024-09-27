@@ -37,3 +37,8 @@ quirks:
 in the labels of compose files, service goes:
 "servicename-containername" and all underscores are translated to dashes.
 Don't ask me, but if you don't do this, traefik throws a fit.
+
+## Basic Auth Passwords
+
+'sudo apt install apache2-utils'
+use htpasswd
