@@ -1,0 +1,30 @@
+services:
+  traefik:
+    image: "docker.io/traefik:v3.1"
+    container_name: "traefik"
+    networks:
+      - traefik_net
+    hostname: "traefik"
+    ports:
+      - "8080:8080"
+      - "443:443"
+      - "80:80"
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "$CONFIGS_DIR/traefik/traefik.yml:/traefik.yml:ro"
+      - "$VOLUMES_DIR/traefik/letsencrypt/acme:/etc/traefik/acme"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=resolver"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.$DOMAINNAME`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=traefik_dashboard_auth"
+      - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.users=admin:$$2y$$05$$UBSaiZSQySmOPJtsrgt5D.s01OsnyYYbKsGr1fA1.eKFEjy.xGKHu"
+      - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.headerField=X-WebAuth-User"
+
+networks:
+  traefik_net:
+    name: $TRAEFIK_NET
+    external: true

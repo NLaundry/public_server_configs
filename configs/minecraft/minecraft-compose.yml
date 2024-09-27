@@ -1,0 +1,29 @@
+services:
+    minecraft:
+        image: itzg/minecraft-server
+        container_name: "minecraft"
+        networks:
+        - traefik_net
+        tty: true
+        stdin_open: true
+        ports:
+        - "25565:25565"
+        environment:
+            EULA: "TRUE"
+            VERSION: "1.21"
+            TYPE: "FABRIC"
+            INIT_MEMORY: 1G
+            MAX_MEMORY: 4G
+        volumes:
+            - $VOLUMES_DIR/minecraft:/data
+        labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.minecraft.entrypoints=websecure"
+        - "traefik.http.routers.minecraft.tls.certresolver=resolver"
+        - "traefik.http.routers.minecraft.rule=Host(`minecraft.$DOMAINNAME`)"
+        - "traefik.http.routers.minecraft.service=minecraft-minecraft"
+
+networks:
+    traefik_net:
+        name: $TRAEFIK_NET
+        external: true
